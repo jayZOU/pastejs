@@ -14,13 +14,16 @@
 <body>
 <div class="box" id="box">剪切区域</div>
 <img src="a.png" id="img">
+<div id="text"></div>
 <script src="./build/pastejs.js"></script>
 <script>
 	var pastejs = new Pastejs({
 		isDebug: true,
-		note : box,
-		callBack: function(base64){
-			document.getElementById("img").src = base64;
+		target : box,
+		callBack: function(paste){
+			console.log(paste);
+			document.getElementById("img").src = paste['source'];
+			document.getElementById("text").innerHTML = "size:" + paste['blob'].size + "<br>type:" + paste['blob'].type;
 		}
 	});
 </script>

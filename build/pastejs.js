@@ -9,7 +9,7 @@ var Pastejs = function () {
 		_classCallCheck(this, Pastejs);
 
 		this.isDebug = opts.isDebug || false;
-		this.note = opts.note || null;
+		this.target = opts.target || null;
 		this.callBack = opts.callBack || function () {};
 
 		this._init();
@@ -19,8 +19,8 @@ var Pastejs = function () {
 		key: '_init',
 		value: function _init() {
 			var self = this,
-			    note = self.note;
-			if (!note) this.throwIf('必须传入note参数');
+			    target = self.target;
+			if (!target) this.throwIf('必须传入note参数');
 
 			self._bindEvent();
 		}
@@ -28,27 +28,28 @@ var Pastejs = function () {
 		key: '_bindEvent',
 		value: function _bindEvent() {
 			var self = this,
-			    note = self.note;
-			note.addEventListener("paste", function (e) {
+			    target = self.target;
+			target.addEventListener("paste", function (e) {
 				if (!(e.clipboardData && e.clipboardData.items && e.clipboardData.items[0])) {
 					this.throwIf('不支持剪切板事件');
 					return;
 				}
-				// console.log(111);
-				var item = e.clipboardData.items[0];
-
-				if (item.kind == "file") {
-					var reader = new FileReader();
-					reader.onload = function (event) {
-						console.log(event.target);
-						// self.callBack(event.target.result);
-						// document.getElementById("img1").src = event.target.result;
-					};
-					reader.readAsDataURL(item.getAsFile());
+				var items = e.clipboardData.items,
+				    paste = [];
+				if (items) {
+					for (var i = 0; i < items.length; i++) {
+						if (items[i].type.indexOf("image") !== -1) {
+							var blob = items[i].getAsFile();
+							var URLObj = window.URL || window.webkitURL || window.createObjectURL;
+							var source = URLObj.createObjectURL(blob);
+							paste['blob'] = blob;
+							paste['source'] = source;
+							self.callBack(paste);
+						}
+					}
 				}
 			});
 		}
-
 		//错误数据弹出
 
 	}, {
