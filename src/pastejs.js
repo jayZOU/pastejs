@@ -45,3 +45,5 @@ class Pastejs {
 		}
 	}
 }
+
+module.exports = Pastejs;

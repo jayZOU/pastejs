@@ -1,47 +1,100 @@
-'use strict';
+/******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId])
+/******/ 			return installedModules[moduleId].exports;
 
-var Pastejs = function () {
-	function Pastejs(opts) {
-		_classCallCheck(this, Pastejs);
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			exports: {},
+/******/ 			id: moduleId,
+/******/ 			loaded: false
+/******/ 		};
 
-		this.isDebug = opts.isDebug || false;
-		this.target = opts.target || null;
-		this.callBack = opts.callBack || function () {};
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
 
-		this._init();
-	}
+/******/ 		// Flag the module as loaded
+/******/ 		module.loaded = true;
 
-	_createClass(Pastejs, [{
-		key: '_init',
-		value: function _init() {
-			var self = this,
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+
+
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "";
+
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(0);
+/******/ })
+/************************************************************************/
+/******/ ([
+/* 0 */
+/***/ function(module, exports, __webpack_require__) {
+
+	const Pastejs = __webpack_require__(1);
+
+	// console.log(pastejs);
+
+	const pastejs = new Pastejs({
+		isDebug: true,
+		target: box,
+		callBack: function (paste) {
+			console.log(paste);
+			document.getElementById("img").src = paste['source'];
+			document.getElementById("text").innerHTML = "size:" + paste['blob'].size + "<br>type:" + paste['blob'].type;
+		}
+	});
+
+	// console.log(Pastejs._init);
+
+/***/ },
+/* 1 */
+/***/ function(module, exports) {
+
+	class Pastejs {
+		constructor(opts) {
+			this.isDebug = opts.isDebug || false;
+			this.target = opts.target || null;
+			this.callBack = opts.callBack || function () {};
+
+			this._init();
+		}
+		_init() {
+			let self = this,
 			    target = self.target;
 			if (!target) this.throwIf('必须传入note参数');
 
 			self._bindEvent();
 		}
-	}, {
-		key: '_bindEvent',
-		value: function _bindEvent() {
-			var self = this,
+		_bindEvent() {
+			let self = this,
 			    target = self.target;
 			target.addEventListener("paste", function (e) {
 				if (!(e.clipboardData && e.clipboardData.items && e.clipboardData.items[0])) {
 					this.throwIf('不支持剪切板事件');
 					return;
 				}
-				var items = e.clipboardData.items,
+				let items = e.clipboardData.items,
 				    paste = [];
 				if (items) {
 					for (var i = 0; i < items.length; i++) {
 						if (items[i].type.indexOf("image") !== -1) {
-							var blob = items[i].getAsFile();
-							var URLObj = window.URL || window.webkitURL || window.createObjectURL;
-							var source = URLObj.createObjectURL(blob);
+							let blob = items[i].getAsFile();
+							let URLObj = window.URL || window.webkitURL || window.createObjectURL;
+							let source = URLObj.createObjectURL(blob);
 							paste['blob'] = blob;
 							paste['source'] = source;
 							self.callBack(paste);
@@ -51,18 +104,15 @@ var Pastejs = function () {
 			});
 		}
 		//错误数据弹出
-
-	}, {
-		key: 'throwIf',
-		value: function throwIf() {
-			var msg = arguments.length <= 0 || arguments[0] === undefined ? '未知错误' : arguments[0];
-
+		throwIf(msg = '未知错误') {
 			if (this.isDebug) {
 				alert(msg);
 				return;
 			}
 		}
-	}]);
+	}
 
-	return Pastejs;
-}();
+	module.exports = Pastejs;
+
+/***/ }
+/******/ ]);

@@ -1,20 +1,20 @@
 {
   "name": "pastejs",
-  "version": "1.0.0",
+  "version": "1.0.5",
   "description": "paste image to DOM",
-  "main": "gulpfile.js",
+  "main": "./src/pastejs.js",
   "dependencies": {
+    "webpack": "^1.12.4",
+    "webpack-dev-server": "^1.12.1"
   },
   "devDependencies": {
-    "babel-preset-es2015": "^6.3.13",
-    "gulp": "^3.9.0",
-    "gulp-babel": "^6.1.1",
-    "gulp-connect": "^2.2.0",
-    "gulp-uglify": "^1.5.1",
-    "watchify": "^3.6.1"
+    "babel-core": "^6.4.0",
+    "babel-loader": "^6.2.1",
+    "babel-preset-es2015": "^6.3.13"
   },
   "scripts": {
-    "build": "gulp es6"
+    "build": "webpack --p",
+    "dev": "webpack-dev-server --devtool eval --progress --colors --hot --content-base build"
   },
   "repository": {
     "type": "git",
