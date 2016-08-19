@@ -28,4 +28,4 @@
 MIT
 
 
-  [1]: http://jayzou.github.io/pastejs/index.html
+  [1]: http://jayzou.github.io/demo/pastejs/index.html
